@@ -21,38 +21,66 @@
     }
 }
 
-@code
-{
-    IEnumerable<string> fragments;
+@code {
+    private MudHighlighterContext _context;
 
     /// <summary>
     /// The whole text in which a fragment will be highlighted
     /// </summary>
-    [Parameter] public string Text { get; set; }
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public string Text { get; set; }
 
     /// <summary>
     /// The fragment of text to be highlighted
     /// </summary>
-    [Parameter] public string HighlightedText { get; set; }
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public string HighlightedText { get; set; }
+
+    /// <summary>
+    /// The fragments of text to be highlighted
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public IEnumerable<string> HighlightedTexts { get; set; }
 
     /// <summary>
     /// Whether or not the highlighted text is case sensitive
     /// </summary>
-    [Parameter] public bool CaseSensitive { get; set; }
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public bool CaseSensitive { get; set; }
 
     /// <summary>
     /// If true, highlights the text until the next regex boundary
     /// </summary>
-    [Parameter] public bool UntilNextBoundary { get; set; }
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public bool UntilNextBoundary { get; set; }
 
-    //TODO
-    //Accept regex highlightings
-    // [Parameter] public bool IsRegex { get; set; }
+    /// <summary>
+    /// If true, treats HighlightedText/HighlightedTexts as regex search patterns
+    /// </summary>
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public bool IsRegex { get; set; }
 
-
+    [Parameter]
+    [Category(CategoryTypes.Highlighter.Behavior)]
+    public Regex Regex { get; set; }
 
     protected override void OnParametersSet()
     {
-        fragments = GetFragments(Text, HighlightedText, CaseSensitive, UntilNextBoundary);
+        _context = MudHighlighterContext.Build
+        (
+            Text,
+            highlightedText: HighlightedText,
+            highlightedTexts: HighlightedTexts,
+            isRegex: IsRegex,
+            regex: Regex,
+            isCaseSensitive: CaseSensitive,
+            untilNextBoundary: UntilNextBoundary
+        );
     }
 }
